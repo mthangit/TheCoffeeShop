@@ -20,4 +20,4 @@ Công nghệ sử dụng:
 	- IDE: VS Code, XAMPP, NetBeans, IntelliJ
 
 Hướng dẫn sử dụng và cài đặt: 
-	- Đọc trong file huongdancaidatvasudung.docx
+	- Đọc trong file huongdancaidatvasudung.docx trong thư mục doc
