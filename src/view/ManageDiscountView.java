@@ -1,0 +1,542 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package view;
+
+import dao.DiscountDao;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import model.DiscountModel;
+
+/**
+ *
+ * @author HUY THUC
+ */
+public class ManageDiscountView extends javax.swing.JFrame {
+    private HomeView homeView;
+    private AddDiscountView addDiscountView;
+    /**
+     * Creates new form ManageDiscountView
+     */
+    public ManageDiscountView() {
+        initComponents();
+        btnUpdate.setEnabled(false);
+        btnDelele.setEnabled(false);
+    }
+
+    public void validateField() {
+        String name = txtName.getText();
+        String quantity = txtQuantity.getText();
+        String value = txtValue.getText();
+        String startday = dateStartDate.getDateFormatString().toString();
+        String endday = dateEndDate.getDateFormatString().toString();
+        if (!name.equals("") && !quantity.equals("") && !value.equals("") && !startday.equals("") && !endday.equals(""))
+            btnUpdate.setEnabled(true);
+        else
+            btnUpdate.setEnabled(false);
+    }
+
+    private void validateFieldValue() {
+        String input = txtValue.getText();
+
+        if (!input.isEmpty()) {
+            try {
+                int value = Integer.parseInt(input);
+
+                if (value < 0 || value > 100) {
+                    throw new IllegalArgumentException();
+                }
+            } catch (NumberFormatException e) {
+                // Người dùng đã nhập một giá trị không phải số
+                JOptionPane.showMessageDialog(this, "Vui lòng chỉ nhập các số nguyên từ 0 đến 100.", "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+                txtValue.setText("");
+            } catch (IllegalArgumentException e) {
+                // Người dùng đã nhập một số nằm ngoài khoảng từ 0 đến 100
+                JOptionPane.showMessageDialog(this, "Vui lòng chỉ nhập các số nguyên từ 0 đến 100.", "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+                txtValue.setText("");
+            }
+        }
+    }
+
+    private void validateQuantity() {
+        String input = txtQuantity.getText();
+
+        if (!input.isEmpty()) {
+            try {
+                int quantity = Integer.parseInt(input);
+
+                if (quantity < 0) {
+                    throw new IllegalArgumentException();
+                }
+            } catch (NumberFormatException e) {
+                // Người dùng đã nhập một giá trị không phải số
+                JOptionPane.showMessageDialog(this, "Vui lòng chỉ nhập các số nguyên từ 0 đến 100.", "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+                txtQuantity.setText("");
+            } catch (IllegalArgumentException e) {
+                // Người dùng đã nhập một số nằm ngoài khoảng từ 0 đến 100
+                JOptionPane.showMessageDialog(this, "Vui lòng chỉ nhập các số nguyên từ 0 đến 100.", "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+                txtQuantity.setText("");
+            }
+        }
+    }
+
+    private void validateDates() {
+        Date startDate = dateStartDate.getDate();
+        Date endDate = dateEndDate.getDate();
+
+        if (startDate != null && endDate != null) {
+            if (endDate.before(startDate)) {
+                JOptionPane.showMessageDialog(this, "Ngày kết thúc phải sau ngày bắt đầu.", "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+                dateEndDate.setDate(null);
+            }
+        }
+    }
+
+    public void clearData() {
+        lblId.setText("");
+        txtName.setText("");
+        txtQuantity.setText("");
+        txtValue.setText("");
+        dateStartDate.setDate(null);
+        dateEndDate.setDate(null);
+        this.btnUpdate.setEnabled(false);
+        this.btnDelele.setEnabled(false);
+    }
+
+    public void showData() {
+        clearData();
+        DefaultTableModel dtm = (DefaultTableModel) tblDiscount.getModel();
+        dtm.setRowCount(0);
+        ArrayList<DiscountModel> list = DiscountDao.getAllRecords();
+        Iterator<DiscountModel> itr = list.iterator();
+        while (itr.hasNext()) {
+            DiscountModel discountObj = itr.next();
+            dtm.addRow(new Object[] { discountObj.getDiscountID(), discountObj.getDiscountName(),
+                    discountObj.getDiscountQuantity(), discountObj.getDiscountValue(), discountObj.getDiscountStart(),
+                    discountObj.getDiscountEnd() });
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        lbID = new javax.swing.JLabel();
+        lbName = new javax.swing.JLabel();
+        lbQuantity = new javax.swing.JLabel();
+        lbValue = new javax.swing.JLabel();
+        lbStartDate = new javax.swing.JLabel();
+        lbEndDate = new javax.swing.JLabel();
+        lblId = new javax.swing.JLabel();
+        txtName = new javax.swing.JTextField();
+        txtQuantity = new javax.swing.JTextField();
+        txtValue = new javax.swing.JTextField();
+        dateStartDate = new com.toedter.calendar.JDateChooser();
+        dateEndDate = new com.toedter.calendar.JDateChooser();
+        btnUpdate = new javax.swing.JButton();
+        btnDelele = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDiscount = new javax.swing.JTable();
+        btnAddDiscount = new javax.swing.JButton();
+        lbTitle = new javax.swing.JLabel();
+        lbIcon = new javax.swing.JLabel();
+        btnBack = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lbID.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbID.setText("ID");
+        getContentPane().add(lbID, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, 70, -1));
+
+        lbName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbName.setText("Tên mã giảm giá");
+        getContentPane().add(lbName, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 160, 120, 30));
+
+        lbQuantity.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbQuantity.setText("Số lượng");
+        getContentPane().add(lbQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, 70, 30));
+
+        lbValue.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbValue.setText("Phần trăm giảm giá");
+        getContentPane().add(lbValue, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 260, 150, 30));
+
+        lbStartDate.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbStartDate.setText("Ngày bắt đầu");
+        getContentPane().add(lbStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 310, 90, 30));
+
+        lbEndDate.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbEndDate.setText("Ngày kết thúc");
+        getContentPane().add(lbEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 360, 100, 30));
+
+        lblId.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblId.setForeground(new java.awt.Color(204, 0, 0));
+        lblId.setText("00");
+        lblId.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                lblIdComponentShown(evt);
+            }
+        });
+        getContentPane().add(lblId, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 120, 37, -1));
+
+        txtName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNameActionPerformed(evt);
+            }
+        });
+        txtName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNameKeyReleased(evt);
+            }
+        });
+        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 156, 160, 30));
+
+        txtQuantity.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtQuantity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtQuantityActionPerformed(evt);
+            }
+        });
+        txtQuantity.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtQuantityKeyReleased(evt);
+            }
+        });
+        getContentPane().add(txtQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 206, 160, 30));
+
+        txtValue.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtValue.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtValueKeyReleased(evt);
+            }
+        });
+        getContentPane().add(txtValue, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 256, 160, 30));
+        getContentPane().add(dateStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 310, 161, 30));
+        getContentPane().add(dateEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 360, 161, 30));
+
+        btnUpdate.setBackground(new java.awt.Color(255, 255, 204));
+        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, -1, 40));
+
+        btnDelele.setBackground(new java.awt.Color(153, 204, 255));
+        btnDelele.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnDelele.setText("Delete");
+        btnDelele.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleleActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnDelele, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 410, -1, 40));
+
+        btnClear.setBackground(new java.awt.Color(204, 204, 204));
+        btnClear.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnClear.setText("Clear");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 410, -1, 40));
+
+        tblDiscount.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Name", "Quantity", "Value", "Ngày bắt đầu", "Ngày kết thúc"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblDiscount.setRowHeight(30);
+        tblDiscount.setSelectionBackground(new java.awt.Color(255, 255, 204));
+        tblDiscount.setSelectionForeground(new java.awt.Color(204, 0, 0));
+        tblDiscount.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDiscountMouseClicked(evt);
+            }
+        });
+        tblDiscount.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                tblDiscountComponentShown(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblDiscount);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 120, 551, 390));
+
+        btnAddDiscount.setBackground(new java.awt.Color(255, 153, 153));
+        btnAddDiscount.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnAddDiscount.setText("ADD DISCOUNT");
+        btnAddDiscount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddDiscountActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAddDiscount, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 470, 320, 40));
+
+        lbTitle.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        lbTitle.setForeground(new java.awt.Color(204, 0, 0));
+        lbTitle.setText("QUẢN LÝ KHUYẾN MÃI");
+        getContentPane().add(lbTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 40, -1, -1));
+
+        lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/pinglogo.png"))); // NOI18N
+        getContentPane().add(lbIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, 100));
+
+        btnBack.setBackground(new java.awt.Color(255, 255, 204));
+        btnBack.setFont(new java.awt.Font("Open Sans", 1, 15)); // NOI18N
+        btnBack.setText("Trở về");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(891, 20, 84, -1));
+
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/bgyellow.png"))); // NOI18N
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 990, 540));
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnClearActionPerformed
+        // TODO add your handling code here:
+        clearData();
+    }// GEN-LAST:event_btnClearActionPerformed
+
+    private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtNameActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_txtNameActionPerformed
+
+    private void txtQuantityActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtQuantityActionPerformed
+        // TODO add your handling code here:
+        validateQuantity();
+    }// GEN-LAST:event_txtQuantityActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+        DiscountModel discount = new DiscountModel();
+        discount.setDiscountID(lblId.getText());
+        discount.setDiscountName(txtName.getText());
+        int quantity = Integer.parseInt(txtQuantity.getText());
+        discount.setDiscountQuantity(quantity);
+        int value = Integer.parseInt(txtValue.getText());
+        discount.setDiscountValue(value);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = dateFormat.format(dateStartDate.getDate());
+        java.sql.Date sqlDate1 = java.sql.Date.valueOf(dateString);
+        discount.setDiscountStart(sqlDate1);
+        String dateString1 = dateFormat.format(dateEndDate.getDate());
+        java.sql.Date sqlDate2 = java.sql.Date.valueOf(dateString1);
+        discount.setDiscountEnd(sqlDate2);
+        DiscountDao.update(discount);
+        showData();
+    }// GEN-LAST:event_btnUpdateActionPerformed
+
+    private void lblIdComponentShown(java.awt.event.ComponentEvent evt) {// GEN-FIRST:event_lblIdComponentShown
+
+    }// GEN-LAST:event_lblIdComponentShown
+
+    private void tblDiscountMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_tblDiscountMouseClicked
+        // TODO add your handling code here:
+        clearData();
+        int index = tblDiscount.getSelectedRow();
+        TableModel model = tblDiscount.getModel();
+        String id = model.getValueAt(index, 0).toString();
+
+        lblId.setText(id);
+
+        String name = model.getValueAt(index, 1).toString();
+        txtName.setText(name);
+        String quantity = model.getValueAt(index, 2).toString();
+        txtQuantity.setText(quantity);
+        String value = model.getValueAt(index, 3).toString();
+        txtValue.setText(value);
+        // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = model.getValueAt(index, 4).toString();
+        java.sql.Date startDay = java.sql.Date.valueOf(dateString);
+        dateStartDate.setDate(startDay);
+        // String endDay = model.getValueAt(index, 5).toString();
+        // txtQuantity.setText(endDay);
+        String dateString1 = model.getValueAt(index, 5).toString();
+        java.sql.Date endDay = java.sql.Date.valueOf(dateString1);
+        dateEndDate.setDate(endDay);
+        btnUpdate.setEnabled(true);
+        btnDelele.setEnabled(true);
+
+    }// GEN-LAST:event_tblDiscountMouseClicked
+
+    private void tblDiscountComponentShown(java.awt.event.ComponentEvent evt) {// GEN-FIRST:event_tblDiscountComponentShown
+        // TODO add your handling code here:
+    }// GEN-LAST:event_tblDiscountComponentShown
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {// GEN-FIRST:event_formComponentShown
+        // TODO add your handling code here:
+        showData();
+    }// GEN-LAST:event_formComponentShown
+
+    private void btnDeleleActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDeleleActionPerformed
+        // TODO add your handling code here:
+        String id = lblId.getText();
+        int a = JOptionPane.showConfirmDialog(null, "Bạn chắc chắn xóa không? ", "Select", JOptionPane.YES_NO_OPTION);
+        if (a == 0) {
+            DiscountDao.delete(id);
+            showData();
+        }
+    }// GEN-LAST:event_btnDeleleActionPerformed
+
+    private void btnAddDiscountActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnAddDiscountActionPerformed
+        // TODO add your handling code here:
+        addDiscountView = new AddDiscountView();
+        addDiscountView.setVisible(true);
+        if (!addDiscountView.isDisplayable()) {
+            showData();
+        }
+    }// GEN-LAST:event_btnAddDiscountActionPerformed
+
+    private void txtNameKeyReleased(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_txtNameKeyReleased
+        // TODO add your handling code here:
+        validateField();
+    }// GEN-LAST:event_txtNameKeyReleased
+
+    private void txtQuantityKeyReleased(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_txtQuantityKeyReleased
+        // TODO add your handling code here:
+        validateField();
+        validateQuantity();
+    }// GEN-LAST:event_txtQuantityKeyReleased
+
+    private void txtValueKeyReleased(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_txtValueKeyReleased
+        // TODO add your handling code here:
+        validateField();
+        validateFieldValue();
+    }// GEN-LAST:event_txtValueKeyReleased
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        homeView = new HomeView();
+        homeView.setVisible(true);
+        this.dispose();
+    }// GEN-LAST:event_btnBackActionPerformed
+
+    private void txtValueActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtValueActionPerformed
+        // TODO add your handling code here:
+
+    }// GEN-LAST:event_txtValueActionPerformed
+
+    private void dateStartDatePropertyChange(java.beans.PropertyChangeEvent evt) {// GEN-FIRST:event_dateStartDatePropertyChange
+        // TODO add your handling code here:
+        validateDates();
+    }// GEN-LAST:event_dateStartDatePropertyChange
+
+    private void dateEndDatePropertyChange(java.beans.PropertyChangeEvent evt) {// GEN-FIRST:event_dateEndDatePropertyChange
+        // TODO add your handling code here:
+        validateDates();
+    }// GEN-LAST:event_dateEndDatePropertyChange
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
+        // (optional) ">
+        /*
+         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
+         * look and feel.
+         * For details see
+         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ManageDiscountView.class.getName()).log(java.util.logging.Level.SEVERE,
+                    null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ManageDiscountView.class.getName()).log(java.util.logging.Level.SEVERE,
+                    null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ManageDiscountView.class.getName()).log(java.util.logging.Level.SEVERE,
+                    null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ManageDiscountView.class.getName()).log(java.util.logging.Level.SEVERE,
+                    null, ex);
+        }
+        // </editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ManageDiscountView().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddDiscount;
+    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnDelele;
+    private javax.swing.JButton btnUpdate;
+    private com.toedter.calendar.JDateChooser dateEndDate;
+    private com.toedter.calendar.JDateChooser dateStartDate;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbEndDate;
+    private javax.swing.JLabel lbID;
+    private javax.swing.JLabel lbIcon;
+    private javax.swing.JLabel lbName;
+    private javax.swing.JLabel lbQuantity;
+    private javax.swing.JLabel lbStartDate;
+    private javax.swing.JLabel lbTitle;
+    private javax.swing.JLabel lbValue;
+    private javax.swing.JLabel lblId;
+    private javax.swing.JTable tblDiscount;
+    private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtQuantity;
+    private javax.swing.JTextField txtValue;
+    // End of variables declaration//GEN-END:variables
+}

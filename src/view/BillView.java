@@ -1,0 +1,608 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package view;
+
+import common.OpenFilePdf;
+import common.FileManager;
+import dao.BillDao;
+import dao.UserDAO;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File;
+
+import model.BillModel;
+
+/**
+ *
+ * @author HUY THUC
+ */
+public class BillView extends javax.swing.JFrame {
+    private HomeView homeView;
+    private ArrayList<BillModel> list;
+
+    /**
+     * Creates new form BillView
+     */
+    public BillView() {
+        initComponents();
+        setDateToday();
+    }
+
+    public void setDateToday() {
+        Calendar calendar = Calendar.getInstance();
+        Date currentDate = calendar.getTime();
+        dateDate.setDate(currentDate);
+    }
+
+    public void setDataTableBill(ArrayList<BillModel> list) {
+        DefaultTableModel dtm = (DefaultTableModel) tblBill.getModel();
+        dtm.setRowCount(0);
+        Iterator<BillModel> itr = list.iterator();
+        while (itr.hasNext()) {
+            BillModel billObj = itr.next();
+            dtm.addRow(new Object[] { billObj.getBillID(), billObj.getCustomerName(), billObj.getCustomerPhone(),
+                    billObj.getBillDate(), billObj.getBillPrice() });
+
+        }
+    }
+
+    public void tableDetails() {
+        String date = "";
+        String incDec = (String) comboBoxSort.getSelectedItem();
+        DefaultTableModel dtm = (DefaultTableModel) tblBill.getModel();
+        dtm.setRowCount(0);
+        if (incDec.equals("Tăng dần")) {
+            ArrayList<BillModel> list = BillDao.getAllRecordByINC(date);
+            Iterator<BillModel> itr = list.iterator();
+            while (itr.hasNext()) {
+                BillModel billObj = itr.next();
+                dtm.addRow(new Object[] { billObj.getBillID(), billObj.getCustomerName(), billObj.getCustomerPhone(),
+                        billObj.getBillDate(), billObj.getBillPrice() });
+            }
+        } else {
+            ArrayList<BillModel> list = BillDao.getAllRecordByDESC(date);
+            Iterator<BillModel> itr = list.iterator();
+            while (itr.hasNext()) {
+                BillModel billObj = itr.next();
+                dtm.addRow(new Object[] { billObj.getBillID(), billObj.getCustomerName(), billObj.getCustomerPhone(),
+                        billObj.getBillDate(), billObj.getBillPrice() });
+
+            }
+        }
+    }
+
+    public void showBillData() {
+        if (list != null) {
+            list.clear();
+        }
+        list = BillDao.getAllBill();
+        setDataTableBill(list);
+    }
+
+    public void sortTable(ArrayList<BillModel> list) {
+        ArrayList<BillModel> reverseList = new ArrayList<>();
+        for (int i = list.size() - 1; i >= 0; i--) {
+            reverseList.add(list.get(i));
+        }
+        setDataTableBill(reverseList);
+    }
+
+    public void setDataTableBillByDate(String date) {
+        if (list != null) {
+            list.clear();
+        }
+        list = BillDao.getAllRecordByINC(date);
+        setDataTableBill(list);
+    }
+
+    public void sortTableReverse(String name) {
+        if (list != null) {
+            list.clear();
+        }
+        list = BillDao.getBillByName(name);
+        sortTable(list);
+    }
+
+    public void showDataSorted(String name, String date) {
+        if (list != null) {
+            list.clear();
+        }
+        String incDec = (String) comboBoxSort.getSelectedItem();
+        if (name.isEmpty()) {
+            if (incDec.equals("Tăng dần")) {
+                list = BillDao.getAllRecordByINC(date);
+                setDataTableBill(list);
+            } else if (incDec.equals("Giảm dần")) {
+                list = BillDao.getAllRecordByDESC(date);
+                setDataTableBill(list);
+            }
+        } else {
+            if (incDec.equals("Tăng dần")) {
+                list = BillDao.getAllRecordByNameAndINC(date, name);
+                setDataTableBill(list);
+            } else if (incDec.equals("Giảm dần")) {
+                list = BillDao.getAllRecordByNameAndDESC(date, name);
+                setDataTableBill(list);
+            }
+        }
+    }
+
+    public void showBillByName(String name) {
+        list.clear();
+        list = BillDao.getBillByName(name);
+        setDataTableBill(list);
+    }
+
+    public void setMonthAndYear(String month, String year) {
+        this.comboBoxYear.setSelectedItem(year);
+        this.comboBoxMonth.setSelectedItem(month);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        testDayPicker1 = new com.qt.datapicker.TestDayPicker();
+        testDayPicker2 = new com.qt.datapicker.TestDayPicker();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblBill = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        lbSortBillID = new javax.swing.JLabel();
+        comboBoxSort = new javax.swing.JComboBox<>();
+        btnDeleteBill = new javax.swing.JButton();
+        btnOpenBill = new javax.swing.JButton();
+        txtFillByName = new javax.swing.JTextField();
+        lbSortBill = new javax.swing.JLabel();
+        lbDate = new javax.swing.JLabel();
+        dateDate = new com.toedter.calendar.JDateChooser();
+        lbYear = new javax.swing.JLabel();
+        comboBoxYear = new javax.swing.JComboBox<>();
+        lbMonth = new javax.swing.JLabel();
+        comboBoxMonth = new javax.swing.JComboBox<>();
+        comboBoxDisplay = new javax.swing.JComboBox<>();
+        lbName = new javax.swing.JLabel();
+        btnBack = new javax.swing.JButton();
+        lbTitle = new javax.swing.JLabel();
+        lbIcon = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        tblBill.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Mã hóa đơn", "Tên khách hàng", "Số điện thoại", "Ngày", "Tổng giá trị"
+            }
+        ));
+        tblBill.setRowHeight(30);
+        tblBill.setSelectionBackground(new java.awt.Color(255, 255, 204));
+        tblBill.setSelectionForeground(new java.awt.Color(204, 0, 0));
+        tblBill.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblBillMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblBill);
+
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 100, 540, 390));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lbSortBillID.setFont(new java.awt.Font("Open Sans", 2, 14)); // NOI18N
+        lbSortBillID.setText("Sắp xếp theo ID BILL");
+        jPanel1.add(lbSortBillID, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 248, 29));
+
+        comboBoxSort.setFont(new java.awt.Font("Open Sans", 0, 14)); // NOI18N
+        comboBoxSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tăng dần", "Giảm dần" }));
+        comboBoxSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxSortActionPerformed(evt);
+            }
+        });
+        jPanel1.add(comboBoxSort, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, 250, 32));
+
+        btnDeleteBill.setBackground(new java.awt.Color(204, 204, 204));
+        btnDeleteBill.setFont(new java.awt.Font("Open Sans", 1, 14)); // NOI18N
+        btnDeleteBill.setText("Xóa bill");
+        btnDeleteBill.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteBillActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnDeleteBill, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 90, -1));
+
+        btnOpenBill.setBackground(new java.awt.Color(255, 204, 204));
+        btnOpenBill.setFont(new java.awt.Font("Open Sans", 1, 14)); // NOI18N
+        btnOpenBill.setText("Xem bill");
+        btnOpenBill.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenBillActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnOpenBill, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 350, -1, -1));
+
+        txtFillByName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtFillByNameKeyReleased(evt);
+            }
+        });
+        jPanel1.add(txtFillByName, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 220, 170, 30));
+
+        lbSortBill.setFont(new java.awt.Font("Open Sans", 1, 20)); // NOI18N
+        lbSortBill.setForeground(new java.awt.Color(204, 0, 0));
+        lbSortBill.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbSortBill.setText("LỌC HOÁ ĐƠN");
+        jPanel1.add(lbSortBill, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 260, 36));
+
+        lbDate.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbDate.setText("Ngày");
+        jPanel1.add(lbDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 78, 31));
+
+        dateDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dateDatePropertyChange(evt);
+            }
+        });
+        jPanel1.add(dateDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 170, 31));
+
+        lbYear.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbYear.setText("Năm");
+        jPanel1.add(lbYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 78, 30));
+
+        comboBoxYear.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        comboBoxYear.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031" }));
+        comboBoxYear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxYearActionPerformed(evt);
+            }
+        });
+        jPanel1.add(comboBoxYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 130, 170, 30));
+
+        lbMonth.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbMonth.setText("Tháng");
+        jPanel1.add(lbMonth, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 78, 30));
+
+        comboBoxMonth.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        comboBoxMonth.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tháng 01", "Tháng 02", "Tháng 03", "Tháng 04", "Tháng 05", "Tháng 06", "Tháng 07", "Tháng 08", "Tháng 09", "Tháng 10", "Tháng 11", "Tháng 12" }));
+        comboBoxMonth.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxMonthActionPerformed(evt);
+            }
+        });
+        jPanel1.add(comboBoxMonth, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, 170, 30));
+
+        comboBoxDisplay.setFont(new java.awt.Font("Open Sans", 0, 14)); // NOI18N
+        comboBoxDisplay.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lọc theo tên", "Hiển thị toàn bộ" }));
+        comboBoxDisplay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxDisplayActionPerformed(evt);
+            }
+        });
+        jPanel1.add(comboBoxDisplay, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 250, 32));
+
+        lbName.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lbName.setText("Nhập tên");
+        jPanel1.add(lbName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, -1, 30));
+
+        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 270, 390));
+
+        btnBack.setBackground(new java.awt.Color(255, 255, 204));
+        btnBack.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnBack.setText("Trở về");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 10, 80, 30));
+
+        lbTitle.setFont(new java.awt.Font("Open Sans", 1, 36)); // NOI18N
+        lbTitle.setForeground(new java.awt.Color(204, 0, 0));
+        lbTitle.setText("QUẢN LÝ HÓA ĐƠN");
+        jPanel2.add(lbTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 353, -1));
+
+        lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/pinglogo.png"))); // NOI18N
+        jPanel2.add(lbIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 70));
+
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/homebg.png"))); // NOI18N
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 840, 500));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void comboBoxMonthActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_comboboxMonthActionPerformed
+        // TODO add your handling code here:
+        String month = "";
+        String year = "";
+        if (dateDate.getDate() != null) {
+            Date selectedDate = dateDate.getDate();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String date = dateFormat.format(selectedDate);
+            year = date.substring(0, 4);
+            month = "Tháng " + date.substring(5, 7);
+            String yearAndMonth = year + "-" + date.substring(5, 7);
+            if (!comboBoxMonth.getSelectedItem().equals(month) ||
+                    !comboBoxYear.getSelectedItem().equals(year)) {
+                this.dateDate.setDate(null);
+                setDataTableBillByDate(yearAndMonth);
+            }
+        } else {
+            String monthCombobox = comboBoxMonth.getSelectedItem().toString();
+            String yearCombobox = comboBoxYear.getSelectedItem().toString();
+            month = monthCombobox.substring(6, 8);
+            year = yearCombobox.substring(0, 4);
+            String yearAndMonth = year + "-" + month;
+            System.out.println(yearAndMonth);
+            setDataTableBillByDate(yearAndMonth);
+        }
+        // String month = "";
+        // String year = "";
+        // String monthCombobox = comboboxMonth.getSelectedItem().toString();
+        // String yearCombobox = comboboxYear.getSelectedItem().toString();
+        // month = monthCombobox.substring(6, 8);
+        // year = yearCombobox.substring(0, 4);
+        // String yearAndMonth = year + "-" + month;
+        // setDataTableBillByDate(yearAndMonth);
+        // if (txtDate.getDate() != null) {
+        // this.txtDate.setDate(null);
+        // }
+    }// GEN-LAST:event_comboboxMonthActionPerformed
+
+    private void comboBoxYearActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_comboboxYearActionPerformed
+        // TODO add your handling code here:
+        String month = "";
+        String year = "";
+        String monthCombobox = comboBoxMonth.getSelectedItem().toString();
+        String yearCombobox = comboBoxYear.getSelectedItem().toString();
+        month = monthCombobox.substring(6, 8);
+        year = yearCombobox.substring(0, 4);
+        String yearAndMonth = year + "-" + month;
+        if (dateDate.getDate() != null) {
+            Date selectedDate = dateDate.getDate();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String date = dateFormat.format(selectedDate);
+            String currentYear = date.substring(0, 4);
+            if (!comboBoxYear.getSelectedItem().equals(currentYear)) {
+                this.dateDate.setDate(null);
+            }
+        }
+        setDataTableBillByDate(yearAndMonth);
+    }// GEN-LAST:event_comboboxYearActionPerformed
+
+    private void comboBoxDisplayActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_comboboxDisplayActionPerformed
+        // TODO add your handling code here:
+        if (comboBoxDisplay.getSelectedItem().equals("Hiển thị toàn bộ")) {
+            this.txtFillByName.setEnabled(false);
+            this.dateDate.setDate(null);
+        } else {
+            this.txtFillByName.setEnabled(true);
+        }
+    }// GEN-LAST:event_comboboxDisplayActionPerformed
+
+    private void dateDatePropertyChange(java.beans.PropertyChangeEvent evt) {// GEN-FIRST:event_txtDatePropertyChange
+        // TODO add your handling code here:
+        if ("date".equals(evt.getPropertyName())) {
+            Date selectedDate = dateDate.getDate();
+            if (selectedDate != null) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String date = dateFormat.format(selectedDate);
+                String name = txtFillByName.getText();
+                String year = date.substring(0, 4);
+                String month = "Tháng " + date.substring(5, 7);
+                setMonthAndYear(month, year);
+                showDataSorted(name, date);
+            } else {
+                String name = txtFillByName.getText();
+                showBillByName(name);
+            }
+        }
+    }// GEN-LAST:event_txtDatePropertyChange
+
+    private void btnOpenBillActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnOpenBillActionPerformed
+        // TODO add your handling code here:
+        int index = tblBill.getSelectedRow();
+        TableModel model = tblBill.getModel();
+        if (index == -1) {
+            JOptionPane.showMessageDialog(rootPane, "Vui lòng chọn hoá đơn cần xem", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } else {
+            String id = model.getValueAt(index, 0).toString();
+            OpenFilePdf.openById(id);
+        }
+    }// GEN-LAST:event_btnOpenBillActionPerformed
+
+    private void txtFillByNameKeyReleased(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_txtFillByNameKeyReleased
+        // TODO add your handling code here:
+        String name = txtFillByName.getText();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date selectedDate = dateDate.getDate();
+        if (selectedDate != null) {
+            String date = dateFormat.format(selectedDate);
+            showDataSorted(name, date);
+        } else if (selectedDate == null && !name.equals("")) {
+            showBillByName(name);
+        } else {
+            showBillByName(name);
+        }
+    }// GEN-LAST:event_txtFillByNameKeyReleased
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {// GEN-FIRST:event_formComponentShown
+        // TODO add your handling code here:
+        setDateToday();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date selectedDate = dateDate.getDate();
+        String date = dateFormat.format(selectedDate);
+        list = new ArrayList<>();
+        list = BillDao.getAllRecordByINC(date);
+        setDataTableBill(list);
+        btnDeleteBill.setEnabled(false);
+        // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        // String dateString = dateFormat.format(new Date());
+        // java.sql.Date sqlDate = java.sql.Date.valueOf(dateString);
+        // txtDate.setDate(sqlDate);
+    }// GEN-LAST:event_formComponentShown
+
+    private void comboBoxSortActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+        String name = txtFillByName.getText();
+        if (comboBoxSort.getSelectedItem().equals("Giảm dần")) {
+            sortTableReverse(name);
+        } else {
+        }
+        // showDataSorted(name);
+    }// GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void tblBillMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        int index = tblBill.getSelectedRow();
+        if (index != -1) {
+            if (UserDAO.getType().equals("manager")) {
+                btnDeleteBill.setEnabled(true);
+            }
+        }
+    }// GEN-LAST:event_jTable1MouseClicked
+
+    private void btnDeleteBillActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnDeleteBillActionPerformed
+        // TODO add your handling code here:
+        int index = tblBill.getSelectedRow();
+        TableModel model = tblBill.getModel();
+        int billID = Integer.parseInt(model.getValueAt(index, 0).toString());
+        String id = model.getValueAt(index, 0).toString();
+        BillDao.deleteBillByID(billID);
+        FileManager.deletePdfFile(id);
+        list.remove(index);
+        setDataTableBill(list);
+        // FilePDF.openById(id);
+    }// GEN-LAST:event_btnDeleteBillActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        homeView = new HomeView();
+        if (UserDAO.getType().equals("employee")) {
+            homeView.EmployeeView();
+        }
+        homeView.setVisible(true);
+        this.dispose();
+    }// GEN-LAST:event_btnBackActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
+        // (optional) ">
+        /*
+         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
+         * look and feel.
+         * For details see
+         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(BillView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(BillView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(BillView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(BillView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        // </editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new BillView().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnDeleteBill;
+    private javax.swing.JButton btnOpenBill;
+    private javax.swing.JComboBox<String> comboBoxDisplay;
+    private javax.swing.JComboBox<String> comboBoxMonth;
+    private javax.swing.JComboBox<String> comboBoxSort;
+    private javax.swing.JComboBox<String> comboBoxYear;
+    private com.toedter.calendar.JDateChooser dateDate;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbDate;
+    private javax.swing.JLabel lbIcon;
+    private javax.swing.JLabel lbMonth;
+    private javax.swing.JLabel lbName;
+    private javax.swing.JLabel lbSortBill;
+    private javax.swing.JLabel lbSortBillID;
+    private javax.swing.JLabel lbTitle;
+    private javax.swing.JLabel lbYear;
+    private javax.swing.JTable tblBill;
+    private com.qt.datapicker.TestDayPicker testDayPicker1;
+    private com.qt.datapicker.TestDayPicker testDayPicker2;
+    private javax.swing.JTextField txtFillByName;
+    // End of variables declaration//GEN-END:variables
+}
